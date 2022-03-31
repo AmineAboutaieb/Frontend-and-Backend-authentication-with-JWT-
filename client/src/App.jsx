@@ -40,7 +40,11 @@ function App() {
         </div>
       ) : (
         <Router>
-          <ToastContainer />
+          <ToastContainer
+            hideProgressBar={true}
+            autoClose={3000}
+            position={"bottom-center"}
+          />
           <Header />
           <Routes>
             <Route element={<RequireAuth allowedRoles={["user"]} />}>

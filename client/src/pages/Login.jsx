@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { loginUser } from "../api/user";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
+import { Spinner } from "react-activity";
 
 function Login() {
   const { setAuth } = useAuth();
@@ -22,18 +23,23 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await loginUser({ email, password });
-      if (response.error) toast.error(response.error);
-      else {
+      if (response.error) {
+        setIsLoading(false);
+        toast.error(response.error);
+      } else {
         toast.success(response.message);
         setAuth(response.user);
         navigate("/");
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error(error);
     }
   };
@@ -78,13 +84,17 @@ function Login() {
         </FormControl>
       </div>
       <div className="text-center mt-4">
-        <Button
-          variant="contained"
-          disabled={!email || !password}
-          onClick={handleLogin}
-        >
-          Sign in
-        </Button>
+        {isLoading ? (
+          <Spinner className="mx-auto" />
+        ) : (
+          <Button
+            variant="contained"
+            disabled={!email || !password}
+            onClick={handleLogin}
+          >
+            Sign in
+          </Button>
+        )}
       </div>
     </div>
   );

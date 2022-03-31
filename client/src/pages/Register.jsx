@@ -19,9 +19,12 @@ import {
 } from "@mui/icons-material";
 import { registerUser } from "../api/user";
 import { toast } from "react-toastify";
+import { Spinner } from "react-activity";
 
 function Register() {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -35,6 +38,7 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await registerUser({
         firstName,
@@ -42,13 +46,16 @@ function Register() {
         email,
         password,
       });
-      if (response.error) toast.error(response.error);
-      else {
+      if (response.error) {
+        toast.error(response.error);
+        setIsLoading(false);
+      } else {
         toast.success(response.message);
         navigate("/signin");
       }
     } catch (error) {
       toast.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -212,24 +219,28 @@ function Register() {
         )}
       </div>
       <div className="text-center mt-4">
-        <Button
-          variant="contained"
-          disabled={
-            !firstName ||
-            !lastName ||
-            !email ||
-            !password ||
-            !confirmPassword ||
-            password !== confirmPassword ||
-            !USER_REGEX.test(firstName) ||
-            !USER_REGEX.test(lastName) ||
-            !EMAIL_REGEX.test(email) ||
-            !PWD_REGEX.test(password)
-          }
-          onClick={handleRegister}
-        >
-          Sign up
-        </Button>
+        {isLoading ? (
+          <Spinner className="mx-auto" />
+        ) : (
+          <Button
+            variant="contained"
+            disabled={
+              !firstName ||
+              !lastName ||
+              !email ||
+              !password ||
+              !confirmPassword ||
+              password !== confirmPassword ||
+              !USER_REGEX.test(firstName) ||
+              !USER_REGEX.test(lastName) ||
+              !EMAIL_REGEX.test(email) ||
+              !PWD_REGEX.test(password)
+            }
+            onClick={handleRegister}
+          >
+            Sign up
+          </Button>
+        )}
       </div>
     </div>
   );
