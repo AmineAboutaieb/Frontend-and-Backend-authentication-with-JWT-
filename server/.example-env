@@ -1,0 +1,4 @@
+PORT=5500
+ACCESS_TOKEN_SECRET=6a210b13a09174ef982dc2e6f238f6ffa4f469331368350554f765d75f6ad9963b2063fef9bee08ddf0c6da45a337a58e28b15d10beab5a1eaade9c5b7277edd
+MONGO_URI=mongodb+srv://EXAMPLE@EXAMPLE.mongodb.net/EXAMPLE?retryWrites=true&w=majority
+JWT_SECRET=mysecretsecret
